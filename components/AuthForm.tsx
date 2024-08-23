@@ -22,12 +22,14 @@ import { Divide, Loader2 } from 'lucide-react';
 import CustomInput from './CustomInput';
 import { authformSchema } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { getLoggedInUser, signIn, signUp } from '@/lib/actions/user.actions';
 
 const AuthForm = ({ type }: { type: string }) => {
 
     const router = useRouter();
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const loggedInUser = getLoggedInUser();
 
     const formSchema = authformSchema(type);
 
@@ -48,20 +50,20 @@ const AuthForm = ({ type }: { type: string }) => {
             // Signup with Appwrite & create plaid token
             
             if(type === 'sign-up') {
-                // const newUser = await SignUp(data);
+                const newUser = await signUp(data);
 
-                // setUser(newUser);
+                setUser(newUser);
             }
 
             if(type === 'sign-in') {
-                // const response = await signIn({
-                //     email: data.email,
-                //     password: data.password
-                // });
+                const response = await signIn({
+                    email: data.email,
+                    password: data.password
+                });
 
-                // if(response) {
-                //     router.push('/');
-                // }
+                if(response) {
+                    router.push('/');
+                }
                 
             }
         } catch (error) {
